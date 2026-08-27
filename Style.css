@@ -1,0 +1,379 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f5f7;
+    color: #17202a;
+    line-height: 1.5;
+}
+
+header {
+    background: linear-gradient(
+        135deg,
+        #101827,
+        #243447
+    );
+
+    color: white;
+    padding: 55px 20px;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.eyebrow {
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    opacity: 0.65;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-size: 44px;
+    letter-spacing: -1px;
+}
+
+header p {
+    margin-top: 10px;
+    opacity: 0.75;
+}
+
+main {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 22px;
+    box-shadow:
+        0 5px 25px rgba(0,0,0,0.06);
+}
+
+h2 {
+    margin-bottom: 8px;
+}
+
+.intro {
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #4b5563;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    background: white;
+    font-size: 15px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #111827;
+}
+
+.primary {
+    background: #111827;
+    color: white;
+}
+
+.secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 11px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.big-button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 16px;
+    font-size: 16px;
+}
+
+.hidden {
+    display: none;
+}
+
+.dashboard-header {
+    background: white;
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,0.06);
+}
+
+.dashboard-header h2 {
+    font-size: 30px;
+}
+
+.countdown {
+    text-align: center;
+    background: #f1f5f9;
+    border-radius: 14px;
+    padding: 15px 25px;
+}
+
+.countdown span {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.countdown strong {
+    display: block;
+    font-size: 36px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.stat {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.05);
+}
+
+.stat span {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 27px;
+    margin-top: 5px;
+}
+
+.week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.navigation {
+    display: flex;
+    gap: 7px;
+}
+
+.day {
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+    padding: 17px;
+    margin-bottom: 12px;
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.day-name {
+    font-weight: bold;
+}
+
+.day-date {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.workout {
+    border-radius: 11px;
+    padding: 15px;
+    margin-bottom: 8px;
+    background: #f8fafc;
+    border-left: 5px solid #64748b;
+}
+
+.workout.swim {
+    border-left-color: #2563eb;
+    background: #eff6ff;
+}
+
+.workout.bike {
+    border-left-color: #16a34a;
+    background: #f0fdf4;
+}
+
+.workout.run {
+    border-left-color: #ea580c;
+    background: #fff7ed;
+}
+
+.workout.strength {
+    border-left-color: #9333ea;
+    background: #faf5ff;
+}
+
+.workout.rest {
+    border-left-color: #64748b;
+}
+
+.workout.completed {
+    opacity: 0.5;
+}
+
+.workout.completed .workout-title {
+    text-decoration: line-through;
+}
+
+.workout-title {
+    font-weight: bold;
+}
+
+.workout-meta {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.workout-description {
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.workout-action {
+    margin-top: 10px;
+    font-size: 12px;
+    padding: 7px 10px;
+}
+
+.progress-heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress {
+    height: 15px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #111827;
+    transition: width 0.4s;
+}
+
+.reset-button {
+    margin-bottom: 30px;
+}
+
+footer {
+    text-align: center;
+    color: #9ca3af;
+    padding: 30px 20px;
+    font-size: 13px;
+}
+
+@media (max-width: 800px) {
+
+    h1 {
+        font-size: 34px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .week-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    main {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat strong {
+        font-size: 22px;
+    }
+
+}
