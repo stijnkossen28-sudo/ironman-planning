@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ironman Coach</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="eyebrow">PERSONAL TRIATHLON COACH</div>
+
+        <h1>IRONMAN COACH</h1>
+
+        <p>
+            Jouw persoonlijke trainingsplan, automatisch opgebouwd.
+        </p>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- PROFIEL -->
+
+    <section class="card">
+
+        <h2>🏁 Mijn Ironman</h2>
+
+        <p class="intro">
+            Vul je gegevens in. De coach maakt daarna automatisch
+            een trainingsplan voor je.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Naam</label>
+                <input
+                    id="athleteName"
+                    type="text"
+                    placeholder="Bijv. Jan"
+                >
+            </div>
+
+            <div class="field">
+                <label>Ironman datum</label>
+                <input
+                    id="raceDate"
+                    type="date"
+                >
+            </div>
+
+            <div class="field">
+                <label>Huidig zwemniveau</label>
+                <select id="swimLevel">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Gemiddeld</option>
+                    <option value="advanced">Gevorderd</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Huidig fietsniveau</label>
+                <select id="bikeLevel">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Gemiddeld</option>
+                    <option value="advanced">Gevorderd</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Huidig loopniveau</label>
+                <select id="runLevel">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Gemiddeld</option>
+                    <option value="advanced">Gevorderd</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Beschikbare dagen per week</label>
+                <select id="trainingDays">
+                    <option value="4">4 dagen</option>
+                    <option value="5">5 dagen</option>
+                    <option value="6" selected>6 dagen</option>
+                    <option value="7">7 dagen</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Maximaal aantal uur per week</label>
+                <select id="hoursPerWeek">
+                    <option value="6">6 uur</option>
+                    <option value="8">8 uur</option>
+                    <option value="10">10 uur</option>
+                    <option value="12" selected>12 uur</option>
+                    <option value="14">14 uur</option>
+                    <option value="16">16 uur</option>
+                    <option value="18">18 uur</option>
+                    <option value="20">20 uur</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Doel</label>
+                <select id="goal">
+                    <option value="finish">
+                        Ironman uitlopen
+                    </option>
+                    <option value="performance">
+                        Zo goed mogelijk presteren
+                    </option>
+                    <option value="time">
+                        Snelle eindtijd
+                    </option>
+                </select>
+            </div>
+
+        </div>
+
+        <button
+            class="primary big-button"
+            onclick="generatePlan()"
+        >
+            🧠 MAAK MIJN IRONMAN PLAN
+        </button>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+        id="dashboard"
+        class="hidden"
+    >
+
+        <div class="dashboard-header">
+
+            <div>
+                <div class="eyebrow">JOUW PLAN</div>
+
+                <h2 id="welcome">
+                    Mijn Ironman
+                </h2>
+
+                <p id="raceInfo"></p>
+            </div>
+
+            <div class="countdown">
+                <span>Nog</span>
+                <strong id="daysRemaining">-</strong>
+                <span>dagen</span>
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+                <span>Trainingsdagen</span>
+                <strong id="statDays">-</strong>
+            </div>
+
+            <div class="stat">
+                <span>Trainingsuren</span>
+                <strong id="statHours">-</strong>
+            </div>
+
+            <div class="stat">
+                <span>Planweken</span>
+                <strong id="statWeeks">-</strong>
+            </div>
+
+            <div class="stat">
+                <span>Fase</span>
+                <strong id="statPhase">-</strong>
+            </div>
+
+        </div>
+
+
+        <!-- WEEK NAVIGATIE -->
+
+        <section class="card">
+
+            <div class="week-header">
+
+                <div>
+                    <div class="eyebrow">TRAININGSPLAN</div>
+
+                    <h2 id="weekTitle">
+                        Week 1
+                    </h2>
+
+                    <p id="weekSubtitle"></p>
+                </div>
+
+                <div class="navigation">
+
+                    <button
+                        class="secondary"
+                        onclick="previousWeek()"
+                    >
+                        ←
+                    </button>
+
+                    <button
+                        class="secondary"
+                        onclick="currentWeek()"
+                    >
+                        Vandaag
+                    </button>
+
+                    <button
+                        class="secondary"
+                        onclick="nextWeek()"
+                    >
+                        →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="weekPlan"></div>
+
+        </section>
+
+
+        <!-- VOORTGANG -->
+
+        <section class="card">
+
+            <div class="progress-heading">
+
+                <div>
+                    <h2>Weekvoortgang</h2>
+
+                    <p id="progressText">
+                        0% voltooid
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="progress">
+                <div
+                    id="progressBar"
+                    class="progress-bar"
+                ></div>
+            </div>
+
+        </section>
+
+
+        <button
+            class="secondary reset-button"
+            onclick="resetPlan()"
+        >
+            Profiel opnieuw instellen
+        </button>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Ironman Coach · Persoonlijke trainingsplanner
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
