@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ironman Training Planner</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f8;
+        color: #17202a;
+    }
+
+    header {
+        background: linear-gradient(135deg, #111827, #1f2937);
+        color: white;
+        padding: 30px 20px;
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .logo {
+        font-size: 14px;
+        letter-spacing: 3px;
+        font-weight: bold;
+        opacity: 0.7;
+        margin-bottom: 8px;
+    }
+
+    h1 {
+        font-size: 34px;
+        margin-bottom: 20px;
+    }
+
+    .countdown {
+        display: inline-block;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 14px 20px;
+        border-radius: 12px;
+    }
+
+    .countdown strong {
+        font-size: 26px;
+    }
+
+    main {
+        max-width: 1200px;
+        margin: 25px auto;
+        padding: 0 20px;
+    }
+
+    .settings {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    .settings h2 {
+        margin-bottom: 15px;
+    }
+
+    .settings-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: end;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: bold;
+        color: #566573;
+    }
+
+    input, select, textarea {
+        border: 1px solid #d5d8dc;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 15px;
+        background: white;
+    }
+
+    button {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        opacity: 0.9;
+    }
+
+    .primary {
+        background: #111827;
+        color: white;
+    }
+
+    .secondary {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+    .danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    .stat-title {
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .week-header {
+        background: white;
+        border-radius: 15px 15px 0 0;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .week-navigation {
+        display: flex;
+        gap: 8px;
+    }
+
+    .week-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 1px;
+        background: #dfe3e8;
+        border-radius: 0 0 15px 15px;
+        overflow: hidden;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    .day {
+        background: #fff;
+        min-height: 300px;
+        padding: 12px;
+    }
+
+    .day.today {
+        background: #f8fafc;
+        box-shadow: inset 0 4px 0 #111827;
+    }
+
+    .day-name {
+        font-weight: bold;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .day-date {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 4px 0 12px;
+    }
+
+    .training {
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 8px;
+        background: #f1f5f9;
+        border-left: 4px solid #64748b;
+        position: relative;
+    }
+
+    .training.swim {
+        border-left-color: #2563eb;
+        background: #eff6ff;
+    }
+
+    .training.bike {
+        border-left-color: #16a34a;
+        background: #f0fdf4;
+    }
+
+    .training.run {
+        border-left-color: #ea580c;
+        background: #fff7ed;
+    }
+
+    .training.strength {
+        border-left-color: #9333ea;
+        background: #faf5ff;
+    }
+
+    .training.rest {
+        border-left-color: #64748b;
+    }
+
+    .training.done {
+        opacity: 0.55;
+    }
+
+    .training.done .training-title {
+        text-decoration: line-through;
+    }
+
+    .training-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .training-title {
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .training-type {
+        font-size: 11px;
+        margin-top: 4px;
+        color: #6b7280;
+    }
+
+    .training-details {
+        font-size: 12px;
+        margin-top: 7px;
+        color: #374151;
+    }
+
+    .training-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 8px;
+    }
+
+    .training-actions button {
+        font-size: 11px;
+        padding: 5px 7px;
+    }
+
+    .add-training {
+        width: 100%;
+        background: #f3f4f6;
+        color: #374151;
+        margin-top: 5px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: white;
+        width: 100%;
+        max-width: 500px;
+        border-radius: 16px;
+        padding: 25px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-content h2 {
+        margin-bottom: 20px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-full {
+        grid-column: 1 / -1;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .empty {
+        color: #9ca3af;
+        font-size: 12px;
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .progress-section {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    .progress-bar {
+        height: 14px;
+        background: #e5e7eb;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #111827;
+        transition: width 0.4s;
+    }
+
+    @media (max-width: 900px) {
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .week-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .day {
+            min-height: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 27px;
+        }
+
+        .stats {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .settings-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-full {
+            grid-column: auto;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="logo">YOUR PERSONAL TRAINING PLANNER</div>
+        <h1>IRONMAN TRAINING</h1>
+
+        <div class="countdown">
+            <div>Countdown naar je Ironman</div>
+            <strong id="countdown">Geen datum ingesteld</strong>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <section class="settings">
+        <h2>Mijn Ironman</h2>
+
+        <div class="settings-row">
+
+            <div class="field">
+                <label>Ironman datum</label>
+                <input type="date" id="raceDate">
+            </div>
+
+            <div class="field">
+                <label>Naam van je wedstrijd</label>
+                <input type="text" id="raceName" placeholder="Bijv. Ironman Frankfurt">
+            </div>
+
+            <button class="primary" onclick="saveSettings()">
+                Opslaan
+            </button>
+
+        </div>
+    </section>
+
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-title">Trainingen deze week</div>
+            <div class="stat-value" id="totalSessions">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">Voltooide trainingen</div>
+            <div class="stat-value" id="completedSessions">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">Trainingsuren</div>
+            <div class="stat-value" id="totalHours">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">Week</div>
+            <div class="stat-value" id="weekNumber">1</div>
+        </div>
+
+    </section>
+
+
+    <section>
+
+        <div class="week-header">
+
+            <div>
+                <h2 id="weekTitle">Deze week</h2>
+                <p id="weekDates"></p>
+            </div>
+
+            <div class="week-navigation">
+                <button class="secondary" onclick="changeWeek(-1)">
+                    ←
+                </button>
+
+                <button class="secondary" onclick="goToCurrentWeek()">
+                    Vandaag
+                </button>
+
+                <button class="secondary" onclick="changeWeek(1)">
+                    →
+                </button>
+            </div>
+
+        </div>
+
+        <div class="week-grid" id="weekGrid"></div>
+
+    </section>
+
+
+    <section class="progress-section">
+
+        <h2>Voortgang deze week</h2>
+
+        <div id="progressText">
+            0% voltooid
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- MODAL -->
+
+<div class="modal" id="trainingModal">
+
+    <div class="modal-content">
+
+        <h2>Training toevoegen</h2>
+
+        <div class="form-grid">
+
+            <div class="field form-full">
+                <label>Training</label>
+                <input
+                    type="text"
+                    id="trainingTitle"
+                    placeholder="Bijv. Lange duurloop"
+                >
+            </div>
+
+            <div class="field">
+                <label>Sport</label>
+
+                <select id="trainingType">
+                    <option value="swim">🏊 Zwemmen</option>
+                    <option value="bike">🚴 Fietsen</option>
+                    <option value="run">🏃 Lopen</option>
+                    <option value="strength">🏋️ Kracht</option>
+                    <option value="rest">😴 Rust</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Duur (minuten)</label>
+                <input
+                    type="number"
+                    id="trainingDuration"
+                    placeholder="60"
+                    min="0"
+                >
+            </div>
+
+            <div class="field">
+                <label>Afstand</label>
+                <input
+                    type="text"
+                    id="trainingDistance"
+                    placeholder="Bijv. 10 km"
+                >
+            </div>
+
+            <div class="field">
+                <label>Intensiteit</label>
+
+                <select id="trainingIntensity">
+                    <option value="Z1">Z1 - Herstel</option>
+                    <option value="Z2">Z2 - Duur</option>
+                    <option value="Z3">Z3 - Tempo</option>
+                    <option value="Z4">Z4 - Drempel</option>
+                    <option value="Z5">Z5 - Interval</option>
+                </select>
+            </div>
+
+            <div class="field form-full">
+                <label>Notities</label>
+
+                <textarea
+                    id="trainingNotes"
+                    rows="3"
+                    placeholder="Bijv. 3 x 10 min tempo, rustig uitlopen..."
+                ></textarea>
+            </div>
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button class="secondary" onclick="closeModal()">
+                Annuleren
+            </button>
+
+            <button class="primary" onclick="saveTraining()">
+                Training toevoegen
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let trainings = JSON.parse(localStorage.getItem("ironmanTrainings")) || [];
+
+let settings = JSON.parse(localStorage.getItem("ironmanSettings")) || {
+    raceDate: "",
+    raceName: ""
+};
+
+let currentWeekOffset = 0;
+
+let selectedDate = null;
+
+
+/* -------------------------
+   INITIALISATIE
+------------------------- */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById("raceDate").value = settings.raceDate;
+    document.getElementById("raceName").value = settings.raceName;
+
+    renderWeek();
+    updateCountdown();
+
+});
+
+
+/* -------------------------
+   SETTINGS
+------------------------- */
+
+function saveSettings() {
+
+    settings.raceDate =
+        document.getElementById("raceDate").value;
+
+    settings.raceName =
+        document.getElementById("raceName").value;
+
+    localStorage.setItem(
+        "ironmanSettings",
+        JSON.stringify(settings)
+    );
+
+    updateCountdown();
+
+    alert("Instellingen opgeslagen!");
+
+}
+
+
+/* -------------------------
+   COUNTDOWN
+------------------------- */
+
+function updateCountdown() {
+
+    const element =
+        document.getElementById("countdown");
+
+    if (!settings.raceDate) {
+
+        element.textContent =
+            "Geen datum ingesteld";
+
+        return;
+    }
+
+    const race =
+        new Date(settings.raceDate + "T00:00:00");
+
+    const today =
+        new Date();
+
+    today.setHours(0,0,0,0);
+
+    const difference =
+        race - today;
+
+    const days =
+        Math.ceil(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+    if (days > 0) {
+
+        element.textContent =
+            days + " dagen";
+
+    } else if (days === 0) {
+
+        element.textContent =
+            "Vandaag! 🏁";
+
+    } else {
+
+        element.textContent =
+            Math.abs(days) + " dagen geleden";
+
+    }
+
+}
+
+
+/* -------------------------
+   WEEK FUNCTIES
+------------------------- */
+
+function getMonday(date) {
+
+    const d = new Date(date);
+
+    const day = d.getDay();
+
+    const diff =
+        d.getDate() -
+        day +
+        (day === 0 ? -6 : 1);
+
+    return new Date(
+        d.setDate(diff)
+    );
+
+}
+
+
+function getCurrentMonday() {
+
+    const today =
+        new Date();
+
+    return getMonday(today);
+
+}
+
+
+function getSelectedMonday() {
+
+    const monday =
+        getCurrentMonday();
+
+    monday.setDate(
+        monday.getDate() +
+        (currentWeekOffset * 7)
+    );
+
+    return monday;
+
+}
+
+
+function changeWeek(amount) {
+
+    currentWeekOffset += amount;
+
+    renderWeek();
+
+}
+
+
+function goToCurrentWeek() {
+
+    currentWeekOffset = 0;
+
+    renderWeek();
+
+}
+
+
+/* -------------------------
+   WEEK RENDEREN
+------------------------- */
+
+function renderWeek() {
+
+    const monday =
+        getSelectedMonday();
+
+    const grid =
+        document.getElementById("weekGrid");
+
+    grid.innerHTML = "";
+
+    const days = [
+        "Maandag",
+        "Dinsdag",
+        "Woensdag",
+        "Donderdag",
+        "Vrijdag",
+        "Zaterdag",
+        "Zondag"
+    ];
+
+    const monthNames = [
+        "januari",
+        "februari",
+        "maart",
+        "april",
+        "mei",
+        "juni",
+        "juli",
+        "augustus",
+        "september",
+        "oktober",
+        "november",
+        "december"
+    ];
+
+    const sunday =
+        new Date(monday);
+
+    sunday.setDate(
+        sunday.getDate() + 6
+    );
+
+    document.getElementById("weekTitle").textContent =
+        currentWeekOffset === 0
+        ? "Deze week"
+        : "Weekoverzicht";
+
+    document.getElementById("weekDates").textContent =
+        monday.getDate() +
+        " " +
+        monthNames[monday.getMonth()] +
+        " – " +
+        sunday.getDate() +
+        " " +
+        monthNames[sunday.getMonth()];
+
+
+    for (let i = 0; i < 7; i++) {
+
+        const date =
+            new Date(monday);
+
+        date.setDate(
+            monday.getDate() + i
+        );
+
+        const dateString =
+            formatDate(date);
+
+        const day =
+            document.createElement("div");
+
+        day.className = "day";
+
+
+        if (isToday(date)) {
+
+            day.classList.add("today");
+
+        }
+
+
+        let html = `
+
+            <div class="day-name">
+                ${days[i]}
+            </div>
+
+            <div class="day-date">
+                ${date.getDate()}
+            </div>
+
+        `;
+
+
+        const dayTrainings =
+            trainings.filter(
+                t => t.date === dateString
+            );
+
+
+        if (dayTrainings.length === 0) {
+
+            html += `
+                <div class="empty">
+                    Geen training gepland
+                </div>
+            `;
+
+        }
+
+
+        dayTrainings.forEach(training => {
+
+            html += createTrainingHTML(
+                training
+            );
+
+        });
+
+
+        html += `
+
+            <button
+                class="add-training"
+                onclick="openModal('${dateString}')"
+            >
+                + Training
+            </button>
+
+        `;
+
+
+        day.innerHTML = html;
+
+        grid.appendChild(day);
+
+    }
+
+
+    updateStats(monday);
+
+}
+
+
+/* -------------------------
+   TRAINING HTML
+------------------------- */
+
+function createTrainingHTML(training) {
+
+    const typeNames = {
+        swim: "🏊 Zwemmen",
+        bike: "🚴 Fietsen",
+        run: "🏃 Lopen",
+        strength: "🏋️ Kracht",
+        rest: "😴 Rust"
+    };
+
+    let details = [];
+
+    if (training.duration) {
+
+        details.push(
+            training.duration + " min"
+        );
+
+    }
+
+    if (training.distance) {
+
+        details.push(
+            training.distance
+        );
+
+    }
+
+    if (training.intensity) {
+
+        details.push(
+            training.intensity
+        );
+
+    }
+
+
+    return `
+
+        <div class="
+            training
+            ${training.type}
+            ${training.completed ? "done" : ""}
+        ">
+
+            <div class="training-top">
+
+                <div class="training-title">
+                    ${escapeHTML(training.title)}
+                </div>
+
+            </div>
+
+            <div class="training-type">
+                ${typeNames[training.type]}
+            </div>
+
+            ${
+                details.length
+                ? `
+                    <div class="training-details">
+                        ${details.join(" • ")}
+                    </div>
+                  `
+                : ""
+            }
+
+            ${
+                training.notes
+                ? `
+                    <div class="training-details">
+                        ${escapeHTML(training.notes)}
+                    </div>
+                  `
+                : ""
+            }
+
+            <div class="training-actions">
+
+                <button
+                    class="secondary"
+                    onclick="toggleTraining('${training.id}')"
+                >
+                    ${training.completed ? "↩ Open" : "✓ Klaar"}
+                </button>
+
+                <button
+                    class="danger"
+                    onclick="deleteTraining('${training.id}')"
+                >
+                    Verwijder
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* -------------------------
+   MODAL
+------------------------- */
+
+function openModal(date) {
+
+    selectedDate = date;
+
+    document.getElementById(
+        "trainingModal"
+    ).classList.add("active");
+
+}
+
+
+function closeModal() {
+
+    document.getElementById(
+        "trainingModal"
+    ).classList.remove("active");
+
+    clearForm();
+
+}
+
+
+function clearForm() {
+
+    document.getElementById(
+        "trainingTitle"
+    ).value = "";
+
+    document.getElementById(
+        "trainingDuration"
+    ).value = "";
+
+    document.getElementById(
+        "trainingDistance"
+    ).value = "";
+
+    document.getElementById(
+        "trainingNotes"
+    ).value = "";
+
+}
+
+
+/* -------------------------
+   TRAINING OPSLAAN
+------------------------- */
+
+function saveTraining() {
+
+    const title =
+        document.getElementById(
+            "trainingTitle"
+        ).value.trim();
+
+    if (!title) {
+
+        alert(
+            "Geef je training een naam."
+        );
+
+        return;
+
+    }
+
+
+    const training = {
+
+        id:
+            Date.now().toString(),
+
+        date:
+            selectedDate,
+
+        title:
+            title,
+
+        type:
+            document.getElementById(
+                "trainingType"
+            ).value,
+
+        duration:
+            Number(
+                document.getElementById(
+                    "trainingDuration"
+                ).value
+            ) || 0,
+
+        distance:
+            document.getElementById(
+                "trainingDistance"
+            ).value,
+
+        intensity:
+            document.getElementById(
+                "trainingIntensity"
+            ).value,
+
+        notes:
+            document.getElementById(
+                "trainingNotes"
+            ).value,
+
+        completed:
+            false
+
+    };
+
+
+    trainings.push(training);
+
+    saveTrainings();
+
+    closeModal();
+
+    renderWeek();
+
+}
+
+
+/* -------------------------
+   TRAINING VOLTOOIEN
+------------------------- */
+
+function toggleTraining(id) {
+
+    const training =
+        trainings.find(
+            t => t.id === id
+        );
+
+    if (!training) return;
+
+    training.completed =
+        !training.completed;
+
+    saveTrainings();
+
+    renderWeek();
+
+}
+
+
+/* -------------------------
+   TRAINING VERWIJDEREN
+------------------------- */
+
+function deleteTraining(id) {
+
+    const confirmDelete =
+        confirm(
+            "Weet je zeker dat je deze training wilt verwijderen?"
+        );
+
+    if (!confirmDelete) return;
+
+    trainings =
+        trainings.filter(
+            t => t.id !== id
+        );
+
+    saveTrainings();
+
+    renderWeek();
+
+}
+
+
+/* -------------------------
+   STATISTIEKEN
+------------------------- */
+
+function updateStats(monday) {
+
+    const sunday =
+        new Date(monday);
+
+    sunday.setDate(
+        sunday.getDate() + 7
+    );
+
+
+    const weekTrainings =
+        trainings.filter(t => {
+
+            const date =
+                new Date(
+                    t.date + "T00:00:00"
+                );
+
+            return (
+                date >= monday &&
+                date < sunday
+            );
+
+        });
+
+
+    const total =
+        weekTrainings.length;
+
+
+    const completed =
+        weekTrainings.filter(
+            t => t.completed
+        ).length;
+
+
+    const minutes =
+        weekTrainings.reduce(
+            (sum, t) =>
+                sum + Number(t.duration || 0),
+            0
+        );
+
+
+    document.getElementById(
+        "totalSessions"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "completedSessions"
+    ).textContent = completed;
+
+
+    document.getElementById(
+        "totalHours"
+    ).textContent =
+        (minutes / 60).toFixed(1);
+
+
+    const currentMonday =
+        getCurrentMonday();
+
+
+    const difference =
+        Math.round(
+            (monday - currentMonday) /
+            (1000 * 60 * 60 * 24 * 7)
+        );
+
+
+    document.getElementById(
+        "weekNumber"
+    ).textContent =
+        Math.max(1, difference + 1);
+
+
+    const percentage =
+        total === 0
+        ? 0
+        : Math.round(
+            (completed / total) * 100
+        );
+
+
+    document.getElementById(
+        "progressText"
+    ).textContent =
+        percentage + "% voltooid";
+
+
+    document.getElementById(
+        "progressFill"
+    ).style.width =
+        percentage + "%";
+
+}
+
+
+/* -------------------------
+   OPSLAAN
+------------------------- */
+
+function saveTrainings() {
+
+    localStorage.setItem(
+        "ironmanTrainings",
+        JSON.stringify(trainings)
+    );
+
+}
+
+
+/* -------------------------
+   DATUM
+------------------------- */
+
+function formatDate(date) {
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+function isToday(date) {
+
+    const today =
+        new Date();
+
+    return (
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate()
+    );
+
+}
+
+
+/* -------------------------
+   VEILIGE TEKST
+------------------------- */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* -------------------------
+   COUNTDOWN UPDATEN
+------------------------- */
+
+setInterval(
+    updateCountdown,
+    60 * 60 * 1000
+);
+
+</script>
+
+</body>
+</html>
